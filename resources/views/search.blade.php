@@ -1,5 +1,5 @@
 @extends('layouts.app')
-@section('title', 'Homepage')
+@section('title', "Search result for: {$keyword}")
 @section('content')
     <div class="container">
         <div class="row">
@@ -8,18 +8,8 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-md-3 my-2">
-                                <form action="" method="get">
-                                    <select name="category" id="category" class="form-control">
-                                        <option value="" disabled selected>Choose a category</option>
-                                        @foreach ($categories as $item)
-                                            <option value="{{ $item->slug }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
-                                </form>
-                            </div>
-                            <div class="col-md-6 my-2">
                                 <form action="{{ route('search') }}" method="get">
-                                    <div class="btn-group" role="group" aria-label="Search">
+                                    <label for="keyword">Search for : </label>
                                         <input name="keyword" type="text" class="form-control" placeholder="Type a keyword...">
                                         <button type="submit" class="btn btn-primary">Search</button>
                                     </div>
@@ -40,4 +30,3 @@
         </div>
     </div>
 @endsection
-

@@ -7,10 +7,10 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@yield('title', 'Page') - {{ config('app.name') }}</title>
 
     <!-- Scripts -->
-    <script src="{{ asset('js/app.js') }}"></script>
+    <script src="{{ asset('js/app.js') }}" defer></script>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
@@ -18,6 +18,11 @@
 
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/dataTables.bootstrap4.min.css">
+    <script src="https://intopa.id/vendor/js/plugins/jquery.dataTables.min.js" defer></script>
+    <script src="https://cdn.datatables.net/1.10.19/js/dataTables.bootstrap4.min.js" defer></script>
 </head>
 <body>
     <div id="app">
@@ -50,11 +55,15 @@
                             @endif
                         @else
                             <li class="nav-item dropdown">
-                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                <a id="navbarDropdown" class="nav-link dropdown-toggle" href="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
+                                    <img src="{{ asset('storage/images/' . Auth::user()->avatar) }}" style="width:25px;height:25px;margin-right:10px" alt="">
                                     {{ Auth::user()->name }} <span class="caret"></span>
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a href="{{ route('home') }}" class="dropdown-item{{ Route::is('home') ? ' active' : '' }}">Dashboard</a>
+                                    <a href="{{ route('profile') }}" class="dropdown-item{{ Route::is('profile') ? ' active' : '' }}">Profile</a>
+                                    <a href="{{ route('change-password') }}" class="dropdown-item{{ Route::is('change-password') ? ' active' : '' }}">Change Password</a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
@@ -66,6 +75,16 @@
                                     </form>
                                 </div>
                             </li>
+                            @if (Auth::user()->is_admin)
+                            <li class="nav-item dropdown">
+                                <a id="adminDropdown" class="nav-link dropdown-toggle" href="" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>Admin <span class="caret"></span></a>
+                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="adminDropdown">
+                                    <a href="{{ route('posts.index') }}" class="dropdown-item{{ Route::is('posts.index') ? ' active' : '' }}">All Post</a>
+                                    <a href="{{ route('posts.create') }}" class="dropdown-item{{ Route::is('posts.create') ? ' active' : '' }}">Create Post</a>
+                                    <a href="{{ route('categories.create') }}" class="dropdown-item{{ Route::is('categories.create') ? ' active' : '' }}">Create Category</a>
+                                </div>
+                            </li>
+                            @endif
                         @endguest
                     </ul>
                 </div>
@@ -76,5 +95,6 @@
             @yield('content')
         </main>
     </div>
+    @yield('script')
 </body>
 </html>
